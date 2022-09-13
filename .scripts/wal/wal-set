@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Source generated colors.
+. "${HOME}/.cache/wal/colors.sh"
+
+main() {
+    awk '{print NR  "= " $s}' "${HOME}/.cache/wal/colors" |
+        head -n -1 > "${HOME}/.cache/wal/colors.ansi"
+    wal-jgmenu > /dev/null
+    wal-zathura > /dev/null
+    setbg "${HOME}/.config/wpg/.current"
+    wal-dunst
+    # wal-telegram > /dev/null
+    # wal-discord &
+    # beautifuldisckrd --css "${HOME}/.cache/wal-discord/style.css"
+}
+
+main

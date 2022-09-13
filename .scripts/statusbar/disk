@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Status bar module for disk space
+# $1 should be drive mountpoint
+# $2 is optional icon, otherwise mountpoint will displayed
+
+case $BLOCK_BUTTON in
+	1) pgrep -x dunst >/dev/null && notify-send "💽 Disk space:" "$(df -h --output=target,used,size)" ;;
+esac
+
+printf "%s" "$(df -h "/" | awk ' /[0-9]/ {print $3 "/" $2}')"

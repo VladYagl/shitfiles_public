@@ -1,0 +1,19 @@
+#!/bin/sh
+export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
+export DISPLAY=:0
+# $HOME/.profile; 
+
+acpi -b | awk -F'[,:%]' '{print $2, $3}' | {
+	read -r status capacity
+
+	if [ "$status" = Discharging -a "$capacity" -lt 10 ]; then
+		notify-send -u critical "Low battery: < 10%"
+	fi
+
+	if [ "$status" = Discharging -a "$capacity" -lt 5 ]; then
+		notify-send -u critical "Critical battery threshold < 5%"
+        sleep 10
+        systemctl suspend
+	fi
+}

@@ -1,0 +1,12 @@
+#!/bin/sh
+for last; do true; done
+
+path=$(dirname $last)
+
+if echo "$@" | grep -q "Why3BIGCOCK"; then
+    cp $HOME/.frama-c/_CoqProject_Why3 $path/_CoqProject
+else
+    cp $HOME/.frama-c/_CoqProject $path
+fi
+
+st -e $EDITOR $last

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+find ~/Pics/u -type f | shuf | sxiv -

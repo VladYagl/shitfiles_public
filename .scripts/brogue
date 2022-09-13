@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/home/vlad/Src/web-brogue/brogue-1.7.5/brogue --size 11 "$@"

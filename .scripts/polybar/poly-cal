@@ -1,0 +1,6 @@
+#!/bin/sh
+cal=$(
+    cal -m --color=always |
+    sed -e 's/\[7m/<span background="gray" foreground="black">/g' |
+    sed -e 's/\[27m/<\/span>/g')
+notify-send -t 0 "$(echo "$cal" | head -n 1)" "$(echo "$cal" | tail -n +2)"

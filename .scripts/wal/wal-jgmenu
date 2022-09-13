@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# shellcheck source=/dev/null
+. "${HOME}/.cache/wal/colors.sh"
+file="${HOME}/.config/jgmenu/jgmenurc"
+pre="${HOME}/.config/jgmenu/jgmenurc_precolor"
+ 
+read -d '' config << EOF
+# Colors {
+
+color_menu_bg = $color2 90
+color_menu_border = $color7 20
+color_norm_fg = $color7 100
+color_sel_bg = $color4 85
+color_sel_fg = $color7 100
+color_sel_border = $color1 8
+color_sep_fg = #ffffff 20
+color_title_fg = $color7 50
+
+color_title_bg = #000000 0
+color_title_border = #000000 0
+color_scroll_ind = #000000 0
+color_norm_bg = #000000 0
+# }
+EOF
+
+printf '%s\n%s' "$(cat $pre)" "$config" > "${file}"

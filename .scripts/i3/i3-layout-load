@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# updating the workspace to the new layout is tricky
+# normally it does not influence existing windows
+# For it to apply to existing windows, we need to
+# first remove them from the workspace and then
+# add them back while we remove any empty placeholders
+# which would normally cause mess. The placeholders
+# are recognize by having no process inside them.
+
+set -x
+
+LAYOUT_FILE=$1
+START_APPS=$2
+
+# # get the list of windows on the current workspace
+WINDOWS=$(xdotool search --all --onlyvisible --desktop \
+    "$(xprop -notype -root _NET_CURRENT_DESKTOP | cut -c 24-)" "" \
+    2>/dev/null)
+
+echo "About to unload all windows from the workspace"
+
+for window in $WINDOWS; do
+
+    # the grep filters out a line which reports on the command that was just
+    # being called however, the line is not there when calling with rofi
+    # from i3
+    HAS_PID=$(xdotool getwindowpid "$window" 2>&1 | grep -v -c command)
+
+    echo "Unloading window '$window'"
+
+    if [ "$HAS_PID" -eq 0 ]; then
+        echo "Window '$window' does not have a process"
+    else
+        xdotool windowunmap "$window" 2>&1
+        echo "'xdotool windounmap $window' returned $?"
+    fi
+
+done
+
+echo ""
+echo "Applying the layout"
+
+# then we can apply to chosen layout
+i3-msg "append_layout $LAYOUT_FILE" 2>&1
+
+echo ""
+echo "About to bring all windows back"
+
+# and then we can reintroduce the windows back to the workspace
+for window in $WINDOWS; do
+
+    # the grep filters out a line which reports on the command that was just
+    # being called however, the line is not there when calling with rofi from i3
+    HAS_PID=$(xdotool getwindowpid "$window" 2>&1 | grep -v -c command)
+
+    echo "Loading back window '$window'"
+
+    if [ "$HAS_PID" -eq 0 ]; then
+        echo "$window does not have a process"
+    else
+        xdotool windowmap "$window"
+        echo "'xdotool windowmap $window' returned $?"
+    fi
+done
+
+if [ -n "$START_APPS" ]; then
+    APPS=$(jq ".. | objects \
+        | select(.name != null) \
+        | [.name, .swallows[].instance] \
+        | @sh" < "$LAYOUT_FILE")
+
+    while IFS= read -r line; do
+        NAME=$(echo "$line" | cut -d\' -f2)
+        INST=$(echo "$line" | cut -d\' -f4)
+
+        # Open terminals
+        if [ "$INST" = '^st$' ]; then
+            if [ "$NAME" = "fish" ]; then
+                st -t "$NAME" &
+            else
+                DIR=$(echo "$NAME" | grep -o '[^ ]*$')
+                CMD=$(echo "$NAME" | awk 'NF{NF-=1};1')
+                CMD=$(echo "$CMD"  | sed 's/\\\"/"/g')
+                echo "Running app: " "$CMD" " in " "$DIR"
+                cd "$DIR" && st -t "$NAME" -e fish -i -C "$CMD" &
+            fi
+        elif [ "$INST" = '^Navigator$' ]; then
+        # Open browser
+            firefox &
+        elif [ "$INST" = '^org.pwmt.zathura$' ]; then
+            # Open Zathura
+            zathura "$NAME" &
+        elif [ "$NAME" = 'album-cover' ]; then
+            # Open album-cover
+            cover_load &
+        else
+            # Hope instance is executable
+            ${INST:1:-1} &
+        fi
+    done <<< "$APPS"
+fi

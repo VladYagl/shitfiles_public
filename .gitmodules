@@ -1,0 +1,12 @@
+[submodule "Src/dmenu"]
+	path = Src/dmenu
+	url = git@github.com:VladYagl/dmenu.git
+[submodule "Src/st"]
+	path = Src/st
+	url = git@github.com:VladYagl/st.git
+[submodule "Src/yay"]
+	path = Src/yay
+	url = https://aur.archlinux.org/yay.git
+[submodule "Src/vifmimg"]
+	path = Src/vifmimg
+	url = https://github.com/cirala/vifmimg

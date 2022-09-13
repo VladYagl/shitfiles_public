@@ -1,0 +1,8 @@
+#!/bin/sh
+
+report=$(unbuffer watson report -w -G -c |
+    ansifilter --pango -f -m ~/.cache/wal/colors.ansi)
+
+log=$(unbuffer watson log -w -G -c |
+    ansifilter --pango -f -m ~/.cache/wal/colors.ansi)
+notify-send -t 0 " " "$report\n\n$log"

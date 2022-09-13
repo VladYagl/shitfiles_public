@@ -1,0 +1,11 @@
+#!/bin/sh
+pid=$(pgrep screenkey) 
+echo " ----> |$pid|"
+
+if [ -z "$pid" ]; then
+    echo "start new"
+    screenkey
+else
+    echo "kill"
+    kill $pid
+fi

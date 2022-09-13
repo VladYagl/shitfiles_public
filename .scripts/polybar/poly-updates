@@ -1,0 +1,17 @@
+#!/bin/sh
+dunstify " Updates:" "Loading..." -r 911 -t 0
+pacman_updates="$(checkupdates)"
+if [ "$pacman_updates" = "" ]
+then
+pacman_updates=""
+else
+pacman_updates="\tPacman:\n$pacman_updates"
+fi
+aur_updates="$(yay -Qum)"
+if [ "$aur_updates" = "" ]
+then
+aur_updates=""
+else
+aur_updates="\tAUR:\n$aur_updates"
+fi
+dunstify " Updates:" "$pacman_updates\n\t\n$aur_updates" -r 911

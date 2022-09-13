@@ -1,0 +1,41 @@
+#!/bin/sh
+
+action="$1"
+direction="$2"
+
+focused_workspace=$(i3-msg -t get_workspaces |\
+    jq --raw-output '.[]|select(.focused).num')
+
+if [ "$direction" = "next" ]
+then
+    target_workspace=$((focused_workspace + 1))
+
+    if [ "$focused_workspace" -le 10 ] 
+    then
+        workspace=$((focused_workspace + 1))
+    else
+        workspace=$((focused_workspace - 10 + 1))
+    fi
+else
+    target_workspace=$((focused_workspace - 1))
+
+    if [ "$focused_workspace" -le 10 ] 
+    then
+        workspace=$((focused_workspace - 1))
+    else
+        workspace=$((focused_workspace - 10 - 1))
+    fi
+fi
+
+echo "$focused_workspace : $workspace -> $target_workspace"
+
+if [ $workspace -le 10 ] && [ $workspace -gt 0 ]
+then
+    if [ "$action" = "move" ]
+    then
+        i3-msg "move container to workspace number $target_workspace" &&\
+            i3-msg "workspace number $target_workspace"
+    else
+        i3-msg "workspace number $target_workspace"
+    fi
+fi

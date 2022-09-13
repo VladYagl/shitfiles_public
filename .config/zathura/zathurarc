@@ -1,0 +1,58 @@
+# zathura config file
+
+set selection-clipboard clipboard
+set statusbar-h-padding 0
+set statusbar-v-padding 0
+set page-padding 1
+set scroll-page-aware "true"
+set smooth-scroll "true"
+set scroll-step 200
+
+map u scroll half-up
+map d scroll half-down
+map D toggle_page_mode
+map r reload
+map R rotate
+map K zoom in
+map J zoom out
+map i recolor
+map p print
+
+map O exec 'zathura $FILE'
+map V exec 'zathura-open-nvr $FILE'
+map T focus_inputbar ":exec zathura-other $FILE ++"
+
+# Colors {
+
+set recolor "false"
+set completion-bg "#0b0b0b"
+set completion-fg "#ddd3ff"
+set completion-group-bg "#0b0b0b"
+set completion-group-fg "#554741"
+set completion-highlight-bg "#ddd3ff"
+set completion-highlight-fg "#0b0b0b"
+set recolor-lightcolor "#0b0b0b"
+set recolor-darkcolor "#ddd3ff"
+set default-bg "#0b0b0b"
+set default-fg "#ddd3ff"
+set inputbar-bg "#0b0b0b"
+set inputbar-fg "#ddd3ff"
+set notification-bg "#0b0b0b"
+set notification-fg "#ddd3ff"
+set notification-error-bg "#98653a"
+set notification-error-fg "#ddd3ff"
+set notification-warning-bg "#98653a"
+set notification-warning-fg "#ddd3ff"
+set statusbar-bg "#0b0b0b"
+set statusbar-fg "#ddd3ff"
+set index-bg "#0b0b0b"
+set index-fg "#ddd3ff"
+set index-active-bg "#ddd3ff"
+set index-active-fg "#0b0b0b"
+set render-loading-bg "#0b0b0b"
+set render-loading-fg "#ddd3ff"
+set window-title-home-tilde true
+set statusbar-basename true
+set selection-clipboard clipboard
+
+# }

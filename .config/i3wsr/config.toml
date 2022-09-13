@@ -1,0 +1,26 @@
+[icons]
+discord = "ﭮ"
+TelegramDesktop = ""
+Firefox = ""
+firefox = ""
+St = ""
+Slack = ""
+Google-chrome = ""
+"music.apple.com__ru" = "ﱘ"
+"Apple Music" = "ﱘ"
+TogglDesktop = "祥"
+"Toggl Desktop" = "祥"
+Frama-c-gui = ""
+jetbrains-idea = ""
+Zathura = ""
+"Minecraft 1.12.2" = ""
+nvim = ""
+libreoffice-calc = "藺"
+
+[options]
+no_names = true
+remove_duplicates = true
+use_instance = true
+
+[general]
+separator = "│"

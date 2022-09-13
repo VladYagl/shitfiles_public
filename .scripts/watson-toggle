@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if watson status | grep -q "No project started."; then
+    watson restart
+else
+    watson stop
+fi

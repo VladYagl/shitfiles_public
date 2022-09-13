@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import re
+
+prot = []
+
+# def desc():
+#     global prot
+#     pass
+
+for filename in sys.stdin.read().split():
+    with open(filename, "r") as f:
+        lines = f.readlines()
+        good = False
+
+        if "DESCRIPTION" in filename:
+            for line in lines:
+                if not (line.startswith("        ") or line.isspace()):
+                    good = False
+                if "PROTOTYPES:" in line:
+                    good = True
+                    continue
+
+                if "INHERIT" in line:
+                    inh = line.split()[1]
+                    lang = inh.split(':')[0]
+                    path = inh.split(':')[1].replace(".", "/")
+                    if lang == "C90":
+                        inh_name = re.sub(r'suite/.*', "suite/4" + path[1:] + "/DESCRIPTION", filename)
+                        if os.path.exists(inh_name):
+                            with open(inh_name, "r") as f2:
+                                lines.extend(f2.readlines())
+                    continue
+
+                if good and not line.isspace():
+                    x = re.search("([^ ()*]*)[(]", line)
+                    if x:
+                        prot.append("%s\t%s\t/STANDARD/;\"\tf" % (x.group(1), filename))
+        else:
+            for line in lines:
+                x = re.search("TEST SPEC REQ-([^ ()*:]*)", line)
+                if x:
+                    prot.append("%s\t%s\t/TEST SPEC REQ-%s/;\"\tv" %
+                                (x.group(1), filename, x.group(1)))
+
+print("""!_TAG_FILE_FORMAT   2   /extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED   1   /0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD  mixed   /number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP    slash   /slash or backslash/
+!_TAG_OUTPUT_MODE   u-ctags /u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT  96  /0 for no limit/
+!_TAG_PROC_CWD  /home/vlad/supertest/top/SuperTest/suite/C99/   //
+!_TAG_PROGRAM_AUTHOR    Universal Ctags Team    //
+!_TAG_PROGRAM_NAME  Universal Ctags /Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL   https://ctags.io/   /official site/
+!_TAG_PROGRAM_VERSION   5.9.0   /d38b6c00/""")
+print("\n".join(sorted(prot)))

@@ -1,0 +1,150 @@
+#!/bin/bash
+# vim: set foldmethod=marker foldlevelstart=0 foldmarker=#\ #{,#\ #}:
+#
+# Author: klaxalk (klaxalk@gmail.com, github.com/klaxalk)
+#
+# Dependencies:
+# - vim/nvim  : scriptable file editing
+# - jq        : json manipulation
+# - rofi      : nice dmenu alternative ---> bro just use dmenu
+# - xdotool   : window manipulation
+# - xrandr    : getting info of current monitor
+# - i3-msg    : i3 tui
+# - awk+sed+cat ...
+
+# #{ CHECK DEPENDENCIES
+
+VIM_BIN="$(whereis -b vim | awk '{print $2}')"
+# NVIM_BIN="$(whereis -b nvim | awk '{print $2}')"
+JQ_BIN="$(whereis -b jq | awk '{print $2}')"
+XDOTOOL_BIN="$(whereis -b xdotool | awk '{print $2}')"
+XRANDR_BIN="$(whereis -b xrandr | awk '{print $2}')"
+DMENU_BIN="$(whereis -b dmenu | awk '{print $2}')"
+
+# nvim doesn't work :(
+# if [ -z "$NVIM_BIN" ] && [ -z "$VIM_BIN" ]; then
+if [ -z "$VIM_BIN" ]; then
+    echo missing vim, please install dependencies
+    exit 1
+fi
+
+if [ -z "$JQ_BIN" ]; then
+    echo missing jq, please install dependencies
+    exit 1
+fi
+
+if [ -z "$XDOTOOL_BIN" ]; then
+    echo missing xdotool, please install dependencies
+    exit 1
+fi
+
+if [ -z "$XRANDR_BIN" ]; then
+    echo missing xrandr, please install dependencies
+    exit 1
+fi
+
+if [ -z "$DMENU_BIN" ]; then
+    echo missing dmenu, please install dependencies
+    exit 1
+fi
+
+# #}
+
+LAYOUT_PATH="${HOME}/.config/i3layouts"
+
+# make directory for storing layouts
+mkdir -p "$LAYOUT_PATH" > /dev/null 2>&1
+
+# logs
+LOG_FILE=/tmp/i3_layout_manager.txt
+echo "" > "$LOG_FILE"
+
+set -x
+exec 1>>"$LOG_FILE" 2>&1
+
+# #{ ASK FOR THE ACTION
+
+# if operating using dmenu
+if [ -z "$1" ]; then
+
+    ACTION=$(echo "Load
+Save
+Delete" | dmenu -i -p "Select action")
+
+    if [ -z "$ACTION" ]; then
+        exit
+    fi
+
+    # get me layout names based on existing file names in the LAYOUT_PATH
+    LAYOUT_NAMES=$(ls -Rt "$LAYOUT_PATH" \
+        | grep "layout.*json" \
+        | sed -nr 's/layout-(.*)\.json/\1/p' \
+        | sed 's/\s/\n/g' \
+        | sed 's/_/ /g')
+    LAYOUT_NAME=$(echo "$LAYOUT_NAMES" \
+        | dmenu -i -p "Select layout (you may type new name when creating)" \
+        | sed 's/\s/_/g')
+
+    APPS="yes"
+# getting argument from command line
+else
+    ACTION="Load"
+    LAYOUT_NAME="${1}"
+
+    if [ -n "$2" ]; then
+        i3-msg "workspace number $2"
+    fi
+
+    APPS="$3"
+fi
+
+# no action, exit
+if [ -z "$LAYOUT_NAME" ]; then
+    exec "$0" "$@"
+fi
+
+# #}
+
+# if the layout name is a full path, use it, otherwise fabricate the full path
+if [[ $LAYOUT_NAME == *".json" ]]; then
+    LAYOUT_FILE=$(realpath "$LAYOUT_NAME")
+else
+    LAYOUT_FILE=$LAYOUT_PATH/layout-"$LAYOUT_NAME".json
+fi
+
+echo "$LAYOUT_FILE"
+
+if [ "$ACTION" == "Load" ] && [ ! -f "$LAYOUT_FILE" ]; then
+    exit
+fi
+
+if [[ "$ACTION" = "Load" ]]; then
+    i3-layout-load "$LAYOUT_FILE" "$APPS"
+fi
+
+if [[ "$ACTION" = "Save" ]]; then
+
+    # ACTION=$(echo "Default (instance)
+# Specific (choose)
+# Match any" | dmenu -i -p "How to identify windows? (xprop style)")
+
+
+    # if [[ "$ACTION" = "Default (instance)" ]]; then
+    #     CRITERION="default"
+    # elif [[ "$ACTION" = "Specific (choose)" ]]; then
+    #     CRITERION="specific"
+    # elif [[ "$ACTION" = "Match any" ]]; then
+    #     CRITERION="any"
+    # fi
+
+    CRITERION="default"
+    i3-layout-save "$LAYOUT_FILE" "$CRITERION"
+fi
+
+if [[ "$ACTION" = "Delete" ]]; then
+    rm "$LAYOUT_FILE"
+    notify-send -u low -t 2000 "Layout deleted" -h string:x-canonical-private-synchronous:anything
+    exec "$0" "$@"
+fi
+
+# #}

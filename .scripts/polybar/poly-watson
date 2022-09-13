@@ -1,0 +1,5 @@
+#!/bin/sh
+report=$(unbuffer watson report -w -G -c |
+    ansifilter --pango -f -m ~/.cache/wal/colors.ansi)
+notify-send -t 0 "$(echo "$(watson report -w -G -c)" | head -n 1)"\
+    "$(echo "$report" | tail -n +2)"

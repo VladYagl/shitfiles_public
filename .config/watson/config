@@ -1,0 +1,8 @@
+[options]
+date_format = %d.%m.%Y
+time_format = %H:%M
+log_current = true
+pager = false
+report_current = true
+stop_on_start = true
+

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -x
+VIM_BIN="$(whereis vim | awk '{print $2}')"
+$VIM_BIN -nEs -u NONE -c "$1" -c "wqa" -- "$2" 

@@ -1,0 +1,37 @@
+#!/bin/sh
+
+DIR="./"
+EXCLUDE="/shit/shit"
+REBUILD_FILES=1
+
+while getopts "e:p:u" opt; do
+    case $opt in
+        u)
+            REBUILD_FILES=0
+            ;;
+        p)
+            DIR=$OPTARG
+            ;;
+        e)
+            EXCLUDE=$OPTARG
+    esac
+done
+
+cd "$DIR"
+
+if [ "$REBUILD_FILES" -eq 1 ]; then
+    rm cscope.* 
+    find "$DIR" \
+        -path $EXCLUDE -prune \
+        -o \(\
+        -name '*.h' \
+        -o -name '*.c' \
+        -o -name '*.hpp' \
+        -o -name '*.cpp' \
+        \)\
+        -print >> cscope.files
+fi
+
+cscope -b -q -k
+
+cd - >/dev/null

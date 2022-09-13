@@ -1,0 +1,9 @@
+#!/bin/sh
+
+tput civis
+stty -echo
+echo ""
+echo ""
+echo "     PAUSED"
+cpulimit -l 0 -p $1 >/dev/null
+# cpulimit -l 1 -p $1

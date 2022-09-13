@@ -1,0 +1,3 @@
+#!/bin/sh
+
+systemd-run $(env | sed -e 's/^/ -E /g') -t -d --user --slice=exec.slice "$@"

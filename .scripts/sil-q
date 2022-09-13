@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd /home/vlad/Src/sil-q
+i3-msg "append_layout ${PWD}/i3-ws.json"
+/home/vlad/Src/sil-q/silx

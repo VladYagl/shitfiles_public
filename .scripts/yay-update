@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+yay -Syu --noconfirm 
+i3-msg restart & disown
+

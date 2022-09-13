@@ -1,0 +1,10 @@
+set cscopequickfix=s-,c-,d-,i-,t-,e-,a-,g-
+nmap <leader>/s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>/g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>/c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>/t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>/e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>/f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <leader>/i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <leader>/d :cs find d <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>/a :cs find a <C-R>=expand("<cword>")<CR><CR>

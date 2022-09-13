@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if ! i3-msg -t get_tree | jq -e -r\
+    '(.nodes[]?.nodes[]?.nodes[]?.floating_nodes[]?.nodes[]?.marks[]?)' |\
+    grep -Fxq "scratch term"
+then
+    i3-sensible-terminal -T 'scratchpad term' &
+    while ! i3-msg -t get_tree | jq -e -r\
+        '(.nodes[]?.nodes[]?.nodes[]?.floating_nodes[]?.nodes[]?.marks[]?)' |\
+        grep -Fxq "scratch term"
+    do
+        echo shit
+    done
+fi
+
+i3-msg '[con_mark="scratch term"] scratchpad show'

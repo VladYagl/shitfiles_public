@@ -1,0 +1,51 @@
+#!/bin/sh
+
+suggestions="clean
+vim
+terminal
+firefox
+chrome
+music
+discord
+idea
+intellij
+pdf
+game
+telegram
+minecraft"
+
+new_name=$(echo "$suggestions" | dmenu -p "New workspace name: ")
+echo $new_name
+
+current_name=$(i3-msg -t get_workspaces |\
+    jq --raw-output '.[]|select(.focused).name')
+
+echo "$current_name" | cut -f1,2 -d":"
+current_name=$(echo "$current_name" | cut -f1,2 -d":")
+
+new_name=$(case "$new_name" in
+    (clean)     echo "";;
+    (vim)       echo "";;
+    (firefox)   echo "";;
+    (chrome)    echo "";;
+    (terminal)  echo "";;
+    (music)     echo "ﱘ";;
+    (discord)   echo "ﭮ";;
+    (idea)      echo "";;
+    (intellij)  echo "";;
+    (pdf)       echo "";;
+    (game)      echo "";;
+    (telegram)  echo "";;
+    (minecraft) echo "";;
+esac)
+
+echo "$new_name"
+
+if [ -z $new_name ];
+then
+    i3-msg rename workspace to "\"$current_name\""
+else
+    i3-msg rename workspace to "\"$current_name: $new_name\""
+fi
+
+

@@ -1,0 +1,61 @@
+set surround
+set commentary
+set multiple-cursors
+
+set hlsearch
+set showmode
+set ignorecase
+set smartcase
+set incsearch
+set noeb
+set ideajoin
+
+set visualbell
+set noerrorbells
+
+set idearefactormode=keep
+
+"Map \ --> Space
+let mapleader = " "
+
+nnoremap <leader><leader> :action SearchEverywhere<CR>
+nnoremap <leader>s :action SaveAll<CR>
+nnoremap <leader>U :action GotoSuperMethod<CR>
+nnoremap <leader>J :action GotoImplementation<CR>
+nnoremap <leader>b :action GotoDeclaration<CR>
+nnoremap <leader>r :action Run<CR>
+nnoremap <leader>R :action Debug<CR>
+nnoremap <leader>h :action Stop<CR>
+" nnoremap <leader>R :action RunConfiguration<CR>
+nnoremap <leader>c :action CompileDirty<CR>
+nnoremap <leader>q :action CloseEditor<CR>
+nnoremap <leader>Q :action CloseAllEditorsButActive<CR>
+nnoremap <leader>n :action RenameElement<CR>
+nnoremap <leader>f :action ShowUsages<CR>
+nnoremap <leader>L :action ReformatCode<CR>
+nnoremap <leader>T :action ToggleLineBreakpoint<CR>
+nnoremap <leader>t :action ActivateTerminalToolWindow<CR>
+nnoremap <leader><Esc> :action HideActiveWindow<CR>
+
+nnoremap <leader>S :action ShowErrorDescription<CR>
+
+" nnoremap <leader>e :action EditorSelectWord<CR>:action CommentByLineComment<CR>:action EditorUnSelectWord<CR>
+nmap <leader>e gcc
+vmap <leader>e gc
+
+nmap <leader>o <C-o>
+nmap <leader>i <C-i>
+
+nnoremap <leader>d <PageDown>
+nnoremap <leader>u <PageUp>
+
+nnoremap <leader>. gt
+nnoremap <leader>, gT
+nnoremap <leader>a :e#<CR>
+
+nnoremap <A-,> :action EditorDecreaseFontSize<Cr>
+nnoremap <A-.> :action EditorIncreaseFontSize<Cr>
+nnoremap <A-0> :action EditorResetFontSize<Cr>
+
+nnoremap <leader>I :so ~/.ideavimrc<CR>
+nnoremap <leader>E :edit ~/.ideavimrc<CR>

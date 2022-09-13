@@ -1,0 +1,6 @@
+#!/bin/sh
+
+id=$(xprop -root | awk '/_NET_ACTIVE_WINDOW\(WINDOW\)/{print $NF}')
+pid=$(xprop -id $id | awk '/PID/ {print $3}')
+i3-sensible-terminal -f 'Monospace-50' -g 16x5 -T 'float term' -e\
+    do-limit $pid

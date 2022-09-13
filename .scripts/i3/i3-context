@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# id=$(xprop -root | awk '/_NET_ACTIVE_WINDOW\(WINDOW\)/{print $NF}')
+# pid=$(xprop -id $id | awk '/PID/ {print $3}')
+
+AT="**"
+EXEC="${AT}exec"
+
+function i3 {
+    echo "echo \"$@\""
+}
+
+function shell {
+    echo $(i3 $EXEC $@)
+}
+
+function for_all_workspace() {
+    local csv=""
+    for i in {1..10}
+    do
+        csv="${csv}$i, $(i3 $1 $i)\n"
+    done
+    echo -e $csv
+}
+
+read -d '' csv << EOF
+Close, $(i3 kill)
+Float, $(i3 floating toggle)
+Fullscreen, $(i3 fullscreen)
+Border,^checkout(border)
+Move,^checkout(move)
+Move to,^checkout(moveto)
+Goto,^checkout(goto)
+Pause, $(shell xlimit)
+
+^tag(border)
+none, $(i3 border none)
+pixel, $(i3 border pixel 3)
+normal, $(i3 border normal)
+
+^tag(move)
+left, $(i3 move left)
+right, $(i3 move right)
+up, $(i3 move up)
+down, $(i3 move down)
+
+^tag(goto)
+$(for_all_workspace "$EXEC i3-workspace goto" | cat -v)
+
+^tag(moveto)
+$(for_all_workspace "$EXEC i3-workspace move" | cat -v)
+EOF
+
+# Todo generate workspace list
+
+echo "$csv" 
+
+cmd=($(echo "$csv" | jgmenu --at-pointer --icon-size=0 --simple))
+
+
+case ${cmd[0]} in
+    $EXEC)
+        echo "Executing -> <${cmd[@]:1}>"
+        exec "${cmd[@]:1}"
+        ;;
+    *)
+        echo "i3-msg -> <${cmd[@]}>"
+        i3-msg "${cmd[@]}"
+        ;;
+esac

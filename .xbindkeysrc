@@ -1,0 +1,36 @@
+# Increase volume
+"pactl set-sink-volume @DEFAULT_SINK@ +2000"
+   XF86AudioRaiseVolume
+
+# Decrease volume
+"pactl set-sink-volume @DEFAULT_SINK@ -2000"
+   XF86AudioLowerVolume
+
+# Mute volume
+"pactl set-sink-mute @DEFAULT_SINK@ toggle"
+   XF86AudioMute
+
+# Brightness Up
+"light -A 5; dunstify 'Brightness' $(light)'%' -r 1488"
+    XF86MonBrightnessUp
+
+# Brightness Down
+"light -U 5; dunstify 'Brightness' $(light)'%' -r 1488"
+    XF86MonBrightnessDown
+
+# Toggle Screen Key
+"toggle-screenkey"
+    XF86Tools
+
+# Music:
+# Play-Pause
+"playerctl play-pause"
+    XF86AudioPlay
+
+# Next
+"playerctl next"
+    XF86AudioNext
+
+# Prev
+"playerctl previous"
+    XF86AudioPrev

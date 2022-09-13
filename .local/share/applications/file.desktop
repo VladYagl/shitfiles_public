@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=File Browser
+Exec=/home/vlad/.scripts/fm %u

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+surf -r /dev/null -c ~/.crawl/cookie.txt -K https://underhound.eu:8080/#play-dcss-0.27
+

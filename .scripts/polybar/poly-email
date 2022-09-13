@@ -1,0 +1,2 @@
+#!/bin/sh
+notify-send "New emails:" "$(notmuch search tag:unread | cut -f2- -d' ' | rev | cut -f3- -d' ' | rev)"

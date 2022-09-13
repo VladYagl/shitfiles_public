@@ -1,0 +1,40 @@
+#!/usr/bin/env perl
+
+BEGIN { $| = 1 } # flush \n
+
+use strict;
+use warnings;
+use Data::Dumper;
+use AnyEvent::I3;
+use v5.10;
+
+my $i3 = i3();
+$i3->connect->recv or die "Error connecting to i3";
+
+$i3->subscribe({
+    'window' => sub {
+        my ($msg) = @_;
+        my $type = $msg->{'change'};
+        if ($type eq 'new') {
+            my $win_id = $msg->{'container'}->{'window'};
+            my $win_prop = $msg->{'container'}->{'window_properties'};
+
+            if ($win_prop->{'class'} eq 'St') {
+                system("xseticon /home/vlad/Pics/term.png -id $win_id")
+            }
+
+            if ($win_prop->{'class'} eq 'Zathura') {
+                system("xseticon /home/vlad/Pics/pdf.png -id $win_id")
+            }
+        }
+    }
+});
+
+$i3->subscribe({
+    'all' => sub {
+        my ($msg) = @_;
+        say Dumper($msg);
+    }
+});
+
+AE::cv->recv;

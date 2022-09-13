@@ -1,0 +1,2 @@
+#!/bin/sh
+git log --reverse --pretty=format:"%an%x09" "$1" | awk '!x[$0]++' | tr '\n' ',' | tr -d '\t' | rev | cut -c2- | rev | tr -d '\n' 

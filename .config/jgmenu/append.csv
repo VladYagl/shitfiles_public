@@ -1,0 +1,9 @@
+Shutdown,^checkout(shutdown),system-shutdown
+
+^tag(shutdown)
+Shutdown,shutdown now,system-shutdown
+Reboot,reboot,system-reboot
+Log out,i3-msg exit,system-log-out
+Sleep,i3lock -f -i ~/.config/wall.png && systemctl suspend,system-shutdown
+Lock,i3lock -i ~/.config/pseudo-wall.png -u -f -p win,system-lock-screen
+Windows,sudo refind-next-boot 'Windows' && reboot,system-reboot
